@@ -182,11 +182,11 @@
 					</div>
 
 				<!-- Blog List Section -->
-					<section id="blog-section" class="main" style="padding-top: 1rem;">
+					<section id="blog-section" class="main" style="margin-top: -1rem;">
 								<div class="spotlight">
 									<div class="content">
 										<header class="major">
-											<h2 style="color: #000000 !important;"><b>Blog Posts</b></h2>
+											<h2 style="color: #333333 !important; font-weight: bold;">Blog Posts</h2>
 										</header>
 										<p style="color: #000000;">Click on any blogs below to read my full code reviews.</p>
 										<div id="blog-list" style="margin-top: 2rem;">
@@ -195,10 +195,10 @@
 									</div>
 								</div>
 								
-								<div id="blog-content" style="display: none;">
+								<div id="blog-content" style="display: none; background-color: #ffffff; border-radius: 0.25em; padding: 2rem; margin-top: 1rem;">
 									<div class="spotlight">
 										<div class="content">
-											<button id="back-to-blogs" class="button small" style="margin-bottom: 1rem;">← Back to Blogs</button>
+											<button id="back-to-blogs" class="button small" style="margin-bottom: 1rem; background-color: transparent; color: #000000 !important; border: 1px solid #000000;">← Back to Blogs</button>
 											<div id="blog-display">
 												<!-- Individual blog content will be displayed here -->
 											</div>
@@ -334,6 +334,7 @@
 							<header class="major">
 								<h2 style="color: #000000 !important; font-weight: bold !important;">${blog.title}</h2>
 							</header>
+							<hr style="border: none; height: 2px; background: linear-gradient(90deg, #000000 0%, #cccccc 100%); margin: 2rem 0; border-radius: 1px; width: 33%;">
 							<div style="white-space: pre-line; line-height: 1.6; margin-top: 1rem; color: #000000 !important; font-weight: bold !important;">
 								${blog.content}
 							</div>
