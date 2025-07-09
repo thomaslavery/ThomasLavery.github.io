@@ -25,11 +25,11 @@ class BlogLoader {
             }
         }
         
-        // Sort blogs by filename to maintain consistent order
+        // Sort blogs by filename in reverse order (newest first)
         blogs.sort((a, b) => {
             const aNum = parseInt(a.filename.replace('blog', '').replace('.txt', ''));
             const bNum = parseInt(b.filename.replace('blog', '').replace('.txt', ''));
-            return aNum - bNum;
+            return bNum - aNum; // Reverse order: newest first
         });
         
         return blogs;

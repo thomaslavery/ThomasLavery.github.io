@@ -141,12 +141,12 @@
 
 						<!-- KLOC Club Section -->
 							<section id="second" class="main">
-								<div class="spotlight">
-									<div class="content">
-										<header class="major">
-											<h2>kLOC Club</h2>
-										</header>
-										<div id="kloc-about">
+								<div id="kloc-about">
+									<div class="spotlight">
+										<div class="content">
+											<header class="major">
+												<h2>kLOC Club</h2>
+											</header>
 											<h3><b>What is kLOC Club?</b></h3>
 											<p>The kLOC Club is an initiative to create a community to share code.
 												The goal is to publicly share and review the last thousand lines (or however many since the last review) of code that you wrote.
@@ -154,13 +154,11 @@
 												Other people in the community are encouraged to review the other peoples code and provide constructive feedback.
 											</p>
 										</div>
+										<span class="image"><img src="images/pic03.jpg" alt="" /></span>
 									</div>
-									<span class="image"><img src="images/pic03.jpg" alt="" /></span>
-								</div>
-								
-								<div class="spotlight">
-									<div class="content">
-										<div id="kloc-about">
+									
+									<div class="spotlight">
+										<div class="content">
 											<h3><b>Purpose</b></h3>
 											<p>The primary purpose of the kLOC Club is to practice reviewing your's and other's code while learning new techniques and practices.
 												The secondary purpose is to further contribute to the open source community.
@@ -171,7 +169,12 @@
 												<!-- Blog entries will be loaded here -->
 											</div>
 										</div>
-										<div id="blog-content" style="display: none;">
+									</div>
+								</div>
+								
+								<div id="blog-content" style="display: none;">
+									<div class="spotlight">
+										<div class="content">
 											<button id="back-to-blogs" class="button small" style="margin-bottom: 1rem;">← Back to Blogs</button>
 											<div id="blog-display">
 												<!-- Individual blog content will be displayed here -->
@@ -297,6 +300,7 @@
 					
 					// Show individual blog content
 					function showBlog(blog) {
+						// Hide the entire kloc-about section (includes both h3 sections)
 						$('#kloc-about').hide();
 						$('#blog-content').show();
 						
@@ -305,7 +309,7 @@
 							<header class="major">
 								<h2>${blog.title}</h2>
 							</header>
-							<div style="white-space: pre-line; line-height: 1.6;">
+							<div style="white-space: pre-line; line-height: 1.6; margin-top: 1rem;">
 								${blog.content}
 							</div>
 						`);
