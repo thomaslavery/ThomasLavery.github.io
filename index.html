@@ -80,6 +80,16 @@
 				max-height: 400px;
 				overflow-y: auto;
 			}
+			
+			#blog-display {
+				color: #000000 !important;
+			}
+			
+			#blog-display h2,
+			#blog-display div {
+				color: #000000 !important;
+				font-weight: bold !important;
+			}
 		</style>
 	</head>
 	<body class="is-preload">
@@ -164,10 +174,23 @@
 												The secondary purpose is to further contribute to the open source community.
 												Finally, I believe that cognitive load is a key factor in knowledge retention. 
 												With the contemporary solution space being largely dominated by AI. kLOC Club serves as a way to constructively increase cognitive load through spaced repetition.</p>
-											<p>Click on any blogs below to read my full code reviews.</p>
-											<div id="blog-list" style="margin-top: 2rem;">
-												<!-- Blog entries will be loaded here -->
-											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+
+					</div>
+
+				<!-- Blog List Section -->
+					<section id="blog-section" class="main" style="padding-top: 1rem;">
+								<div class="spotlight">
+									<div class="content">
+										<header class="major">
+											<h2 style="color: #000000 !important;"><b>Blog Posts</b></h2>
+										</header>
+										<p style="color: #000000;">Click on any blogs below to read my full code reviews.</p>
+										<div id="blog-list" style="margin-top: 2rem;">
+											<!-- Blog entries will be loaded here -->
 										</div>
 									</div>
 								</div>
@@ -183,8 +206,6 @@
 									</div>
 								</div>
 							</section>
-
-					</div>
 
 				<!-- Contact Footer -->
 					<footer id="contact-footer">
@@ -222,6 +243,7 @@
 				$(document).ready(function() {
 					// Hide all sections except intro initially
 					$('#main section').not('#intro').hide();
+					$('#blog-section').hide();
 					
 					// Handle navigation clicks for content switching
 					$('#nav a').on('click', function(e) {
@@ -234,6 +256,7 @@
 						if (targetSection.length) {
 							// Hide all sections
 							$('#main section').hide();
+							$('#blog-section').hide();
 							
 							// Show the target section
 							targetSection.show();
@@ -244,6 +267,8 @@
 							
 							// Load blogs if KLOC Club section is shown
 							if (targetId === 'second') {
+								// Show both kLOC Club and blog sections
+								$('#blog-section').show();
 								loadBlogs();
 							}
 						}
@@ -284,7 +309,7 @@
 						
 						blogs.forEach((blog, index) => {
 							const blogEntry = $(`
-								<div class="blog-entry" style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid #2d2e3a; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease;">
+								<div class="blog-entry" style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid #2d2e3a; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease; background-color: #ffffff;">
 									<h3 style="margin: 0 0 0.5rem 0; color: #000000; font-weight: bold;">${blog.title}</h3>
 								</div>
 							`);
@@ -299,16 +324,17 @@
 					
 					// Show individual blog content
 					function showBlog(blog) {
-						// Hide the entire kloc-about section (includes both h3 sections)
-						$('#kloc-about').hide();
+						// Hide the kLOC Club content and blog list, show the blog content
+						$('#second').hide();
+						$('#blog-list').parent().parent().hide();
 						$('#blog-content').show();
 						
 						const blogDisplay = $('#blog-display');
 						blogDisplay.html(`
 							<header class="major">
-								<h2>${blog.title}</h2>
+								<h2 style="color: #000000 !important; font-weight: bold !important;">${blog.title}</h2>
 							</header>
-							<div style="white-space: pre-line; line-height: 1.6; margin-top: 1rem;">
+							<div style="white-space: pre-line; line-height: 1.6; margin-top: 1rem; color: #000000 !important; font-weight: bold !important;">
 								${blog.content}
 							</div>
 						`);
@@ -317,7 +343,8 @@
 					// Back to blogs button
 					$('#back-to-blogs').on('click', function() {
 						$('#blog-content').hide();
-						$('#kloc-about').show();
+						$('#second').show();
+						$('#blog-list').parent().parent().show();
 					});
 				});
 			</script>
