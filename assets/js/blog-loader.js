@@ -1,15 +1,13 @@
-// Blog loader utility
+// Blog loader utility for GitHub Pages
 class BlogLoader {
     constructor() {
-        this.blogFiles = [
-            'kLOCClubBlogs/blog1.txt',
-            'kLOCClubBlogs/blog2.txt',
-            'kLOCClubBlogs/blog3.txt',
-            'kLOCClubBlogs/blog4.txt'
-        ];
+        this.blogFiles = [];
     }
 
     async loadBlogs() {
+        // First discover all available blog files
+        await this.discoverBlogFiles();
+        
         const blogs = [];
         
         for (const file of this.blogFiles) {
@@ -26,6 +24,13 @@ class BlogLoader {
                 console.warn(`Could not load ${file}:`, error);
             }
         }
+        
+        // Sort blogs by filename to maintain consistent order
+        blogs.sort((a, b) => {
+            const aNum = parseInt(a.filename.replace('blog', '').replace('.txt', ''));
+            const bNum = parseInt(b.filename.replace('blog', '').replace('.txt', ''));
+            return aNum - bNum;
+        });
         
         return blogs;
     }
@@ -54,10 +59,10 @@ class BlogLoader {
 
     // Method to automatically discover new blog files
     async discoverBlogFiles() {
-        // This is a simple approach - in a real implementation, you might want
-        // to maintain a list or use a different approach
         const baseUrl = 'kLOCClubBlogs/';
-        const maxBlogs = 20; // Reasonable limit
+        const maxBlogs = 50; // Increased limit for more blogs
+        
+        this.blogFiles = []; // Reset the list
         
         for (let i = 1; i <= maxBlogs; i++) {
             const filename = `blog${i}.txt`;
@@ -66,11 +71,9 @@ class BlogLoader {
             try {
                 const response = await fetch(filepath);
                 if (response.ok) {
-                    if (!this.blogFiles.includes(filepath)) {
-                        this.blogFiles.push(filepath);
-                    }
-                } else {
-                    // If we can't find a blog file, we've probably reached the end
+                    this.blogFiles.push(filepath);
+                } else if (response.status === 404) {
+                    // If we get a 404, we've probably reached the end
                     break;
                 }
             } catch (error) {
@@ -78,5 +81,7 @@ class BlogLoader {
                 break;
             }
         }
+        
+        console.log(`Discovered ${this.blogFiles.length} blog files:`, this.blogFiles);
     }
 } 

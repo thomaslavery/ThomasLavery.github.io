@@ -260,26 +260,12 @@
 						blogList.html('<p style="text-align: center; color: #9bf1ff;">Loading blogs...</p>');
 						
 						try {
-							// First try to use PHP script (if available)
-							const response = await fetch('get_blogs.php');
-							if (response.ok) {
-								const blogs = await response.json();
-								displayBlogs(blogs);
-							} else {
-								throw new Error('PHP script not available');
-							}
+							// Use JavaScript method for GitHub Pages compatibility
+							const blogs = await blogLoader.loadBlogs();
+							displayBlogs(blogs);
 						} catch (error) {
-							console.log('PHP not available, using JavaScript fallback');
-							// Fallback to JavaScript method
-							try {
-								// Discover new blog files
-								await blogLoader.discoverBlogFiles();
-								const blogs = await blogLoader.loadBlogs();
-								displayBlogs(blogs);
-							} catch (jsError) {
-								console.error('Error loading blogs:', jsError);
-								blogList.html('<p style="text-align: center; color: #ff6b6b;">Error loading blogs. Please try again.</p>');
-							}
+							console.error('Error loading blogs:', error);
+							blogList.html('<p style="text-align: center; color: #ff6b6b;">Error loading blogs. Please try again.</p>');
 						}
 					}
 					
