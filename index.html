@@ -71,6 +71,15 @@
 					gap: 1rem;
 				}
 			}
+			
+			.blog-entry:hover {
+				background-color: #2d2e3a !important;
+			}
+			
+			#blog-list {
+				max-height: 400px;
+				overflow-y: auto;
+			}
 		</style>
 	</head>
 	<body class="is-preload">
@@ -130,6 +139,48 @@
 								</div>
 							</section>
 
+						<!-- KLOC Club Section -->
+							<section id="second" class="main">
+								<div class="spotlight">
+									<div class="content">
+										<header class="major">
+											<h2>kLOC Club</h2>
+										</header>
+										<div id="kloc-about">
+											<h3><b>What is kLOC Club?</b></h3>
+											<p>The kLOC Club is an initiative to create a community to share code.
+												The goal is to publicly share and review the last thousand lines (or however many since the last review) of code that you wrote.
+												This review should include what you did, why you did it, and what you learned.
+												Other people in the community are encouraged to review the other peoples code and provide constructive feedback.
+											</p>
+										</div>
+									</div>
+									<span class="image"><img src="images/pic03.jpg" alt="" /></span>
+								</div>
+								
+								<div class="spotlight">
+									<div class="content">
+										<div id="kloc-about">
+											<h3><b>Purpose</b></h3>
+											<p>The primary purpose of the kLOC Club is to practice reviewing your's and other's code while learning new techniques and practices.
+												The secondary purpose is to further contribute to the open source community.
+												Finally, I believe that cognitive load is a key factor in knowledge retention. 
+												With the contemporary solution space being largely dominated by AI. kLOC Club serves as a way to constructively increase cognitive load through spaced repetition.</p>
+											<p>Click on any blog titles below to read my code reviews.</p>
+											<div id="blog-list" style="margin-top: 2rem;">
+												<!-- Blog entries will be loaded here -->
+											</div>
+										</div>
+										<div id="blog-content" style="display: none;">
+											<button id="back-to-blogs" class="button small" style="margin-bottom: 1rem;">← Back to Blogs</button>
+											<div id="blog-display">
+												<!-- Individual blog content will be displayed here -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+
 					</div>
 
 				<!-- Contact Footer -->
@@ -161,6 +212,7 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script src="assets/js/blog-loader.js"></script>
 			
 			<!-- Custom navigation script -->
 			<script>
@@ -186,9 +238,97 @@
 							// Update active navigation
 							$('#nav a').removeClass('active');
 							$(this).addClass('active');
+							
+							// Load blogs if KLOC Club section is shown
+							if (targetId === 'second') {
+								loadBlogs();
+							}
 						}
 						
 						return false;
+					});
+					
+					// Initialize blog loader
+					const blogLoader = new BlogLoader();
+					
+					// Load blogs from kLOCClubBlogs directory
+					async function loadBlogs() {
+						const blogList = $('#blog-list');
+						blogList.empty();
+						
+						// Show loading message
+						blogList.html('<p style="text-align: center; color: #9bf1ff;">Loading blogs...</p>');
+						
+						try {
+							// First try to use PHP script (if available)
+							const response = await fetch('get_blogs.php');
+							if (response.ok) {
+								const blogs = await response.json();
+								displayBlogs(blogs);
+							} else {
+								throw new Error('PHP script not available');
+							}
+						} catch (error) {
+							console.log('PHP not available, using JavaScript fallback');
+							// Fallback to JavaScript method
+							try {
+								// Discover new blog files
+								await blogLoader.discoverBlogFiles();
+								const blogs = await blogLoader.loadBlogs();
+								displayBlogs(blogs);
+							} catch (jsError) {
+								console.error('Error loading blogs:', jsError);
+								blogList.html('<p style="text-align: center; color: #ff6b6b;">Error loading blogs. Please try again.</p>');
+							}
+						}
+					}
+					
+					// Display blogs in the UI
+					function displayBlogs(blogs) {
+						const blogList = $('#blog-list');
+						blogList.empty();
+						
+						if (blogs.length === 0) {
+							blogList.html('<p style="text-align: center; color: #ffffff;">No blogs found.</p>');
+							return;
+						}
+						
+						blogs.forEach((blog, index) => {
+							const blogEntry = $(`
+								<div class="blog-entry" style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid #2d2e3a; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease;">
+									<h3 style="margin: 0 0 0.5rem 0; color: #9bf1ff;">${blog.title}</h3>
+									<p style="margin: 0; color: #ffffff; opacity: 0.8;">Click to read full article...</p>
+								</div>
+							`);
+							
+							blogEntry.on('click', function() {
+								showBlog(blog);
+							});
+							
+							blogList.append(blogEntry);
+						});
+					}
+					
+					// Show individual blog content
+					function showBlog(blog) {
+						$('#kloc-about').hide();
+						$('#blog-content').show();
+						
+						const blogDisplay = $('#blog-display');
+						blogDisplay.html(`
+							<header class="major">
+								<h2>${blog.title}</h2>
+							</header>
+							<div style="white-space: pre-line; line-height: 1.6;">
+								${blog.content}
+							</div>
+						`);
+					}
+					
+					// Back to blogs button
+					$('#back-to-blogs').on('click', function() {
+						$('#blog-content').hide();
+						$('#kloc-about').show();
 					});
 				});
 			</script>

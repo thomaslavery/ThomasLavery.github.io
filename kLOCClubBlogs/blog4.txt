@@ -1,0 +1,7 @@
+My Fourth Blog Post
+
+This is a test blog post to verify that the automatic blog discovery system works correctly.
+
+When you add new blog files to the kLOCClubBlogs directory, they should automatically appear on the website without any code changes.
+
+The system supports both PHP and JavaScript fallback methods to ensure compatibility with different hosting environments. 
